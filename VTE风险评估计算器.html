@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<title>VTE风险评估计算器</title>
+<script>
+function calculateP() {
+    var age = parseFloat(document.getElementById('age').value);
+    var dDimer = parseFloat(document.getElementById('dDimer').value);
+    var rdw = parseFloat(document.getElementById('rdw').value);
+    var vteHistory = document.getElementById('vteHistory').checked ? 1 : 0;
+    var reducedMobility = document.getElementById('reducedMobility').checked ? 1 : 0;
+    var recentSurgery = document.getElementById('recentSurgery').checked ? 1 : 0;
+    var copdExacerbation = document.getElementById('copdExacerbation').checked ? 1 : 0;
+    var ischemicStroke = document.getElementById('ischemicStroke').checked ? 1 : 0;
+
+    var logitP = -8.62 + 0.040 * age + 3.269 * vteHistory + 1.293 * reducedMobility + 1.191 * recentSurgery + 0.971 * copdExacerbation + 0.753 * ischemicStroke + 0.139 * dDimer + 0.038 * rdw;
+    var pValue = 1 / (1 + Math.exp(-logitP)) * 100;
+
+    document.getElementById('result').innerHTML = pValue.toFixed(2) + '%';
+}
+</script>
+</head>
+<body>
+<h1>VTE风险评估计算器</h1>
+<form>
+    <label>年龄：<input type="number" id="age" required></label><br>
+    <label><input type="checkbox" id="vteHistory"> 既往VTE病史</label><br>
+    <label><input type="checkbox" id="reducedMobility"> 活动能力降低</label><br>
+    <label><input type="checkbox" id="recentSurgery"> 近期（≤1个月）创伤或外科手术</label><br>
+    <label><input type="checkbox" id="copdExacerbation"> 慢性阻塞性肺疾病急性加重</label><br>
+    <label><input type="checkbox" id="ischemicStroke"> 缺血性脑卒中</label><br>
+    <label>D-二聚体：<input type="number" id="dDimer" required></label><br>
+    <label>红细胞分布宽度标准差：<input type="number" id="rdw" required></label><br>
+    <button type="button" onclick="calculateP()">计算P值</button>
+</form>
+<p>P值： <span id="result"></span></p>
+</body>
+</html>
